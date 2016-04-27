@@ -8,12 +8,21 @@ clusterize <- function(file_path) {
   
   image <- load.image(file_path)
   image <- grayscale(image)
+  # Note, there is a bug where if the image is already BW, the above line causes a failure
   
-  km <- kmeans(image, centers = 2)
+  # do the kmeans clustering, looking for 2 clusters. as.vector is needed or else it only does the first row for some reason
+  km <- kmeans(as.vector(image), centers = 2)
   # note km$size returns a two vector - first is sky, second is leaves
   
   num_pixels <- dim(image)[1] * dim(image)[2]
-  return(km$size/num_pixels*100)
+  percents <- km$size/num_pixels*100
+  # note: currently returns in order of higher to lower percent,
+  # this is a problem if there is more sky in an image than leaves.
+  # I can deal with this by calculating the average value of the pixel 
+  # values and executing some code to switch the order in that case.
+  return(percents)
   
 }
 
+# next step is to setup the function to loop through files in folder and make data frames and graphs!!
+# I think that is enough work on this for tonight
