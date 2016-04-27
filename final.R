@@ -69,7 +69,7 @@ plotTheme <- function() {
 # Plot the image
 ggplot(data = imgRGB, aes(x = x, y = y)) + 
   geom_point(colour = rgb(imgRGB[c("R", "G", "B")])) +
-  labs(title = "Original Image: Colorful Bird") +
+  labs(title = "Original Image: BW Tree") +
   xlab("x") +
   ylab("y") +
   plotTheme()
