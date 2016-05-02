@@ -1,7 +1,8 @@
 # main
 library("imager")
+# setwd('~/media/Documents/UIUC/2016/ESE 389/Final Project/')
 
-clusterize <- function(file_path) {
+getPercentLeaf <- function(file_path) {
   # get a kmeans df
   # input image file path
   # output percent leaf cover first sky, second leaves I think
@@ -16,13 +17,18 @@ clusterize <- function(file_path) {
   
   num_pixels <- dim(image)[1] * dim(image)[2]
   percents <- km$size/num_pixels*100
-  # note: currently returns in order of higher to lower percent,
-  # this is a problem if there is more sky in an image than leaves.
-  # I can deal with this by calculating the average value of the pixel 
-  # values and executing some code to switch the order in that case.
   return(percents)
   
 }
 
 # next step is to setup the function to loop through files in folder and make data frames and graphs!!
-# I think that is enough work on this for tonight
+
+loopFiles <- function(photos_path) {
+  # loops through folders and files inside of photos_path and makes a big ol dataframe
+  directories <- list.dirs()
+}
+
+makeGraphs <- function(df) {
+  # function that takes the df with all the data and makes a bunch of pretty graphs in a pdf format
+  
+}
