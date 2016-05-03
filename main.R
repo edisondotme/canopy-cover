@@ -1,5 +1,6 @@
 # main
 library("imager")
+library("foreach")
 # note, imagemagick needs to be installed too for some reason
 # setwd('~/media/Documents/UIUC/2016/ESE 389/Final Project/photos/Braulio - Mar 20')
 
@@ -20,44 +21,61 @@ getPercentLeaf <- function(file_path) {
   percents <- km$size/num_pixels*100
   
   if(mean(image) > 0.5) {
-    # if there is more sky make\
+    # higher than .5 means the image is mostly sky
+    # make sure to sort decreasing if this is the case
+    percents <- sort(percents, decreasing = TRUE)
+  } else {
+    percents <- sort(percents)
   }
   return(percents)
-  
 }
 
 # next step is to setup the function to loop through files in folder and make data frames and graphs!!
 
-loopFiles <- function(photos_path) {
+loopFiles <- function(photos_path, par = TRUE) {
   # loops through files inside of photos_path and makes a big ol matrix
+  orgdir <- getwd()
   setwd(photos_path)
   percents <- c()
-  for(photo in list.files()) {
-    # ims <- append(ims, load.image(photo)) # uses too much ram
-    percents <- append(percents, getPercentLeaf(photo))
+  
+  if(par) {
+    # for some reason, the parallel processing code isn't going that much faster
+    print('doing in parallel!!!')
+    foreach(photo = list.files()) %dopar% {
+      percents <- append(percents, c(getPercentLeaf(photo), photo))
+    }
+  } else {
+    print('not doing in parallel!!')
+    for(photo in list.files()) {
+      # ims <- append(ims, load.image(photo)) # uses too much ram
+      percents <- append(percents, c(getPercentLeaf(photo), photo))
+    }
   }
+  
+  # to test parallel processing time, use system.time(loopFiles(...), par = T or F)
   
   # clean up the matrix
   percents <- percents[!is.na(percents)]
-  percents <- matrix(percents, ncol = 2, byrow = TRUE)
+  percents <- matrix(percents, ncol = 3, byrow = TRUE)
+  
+  percents <- data.frame(percents)
+  colnames(percents) <- c('sky', 'leaf', 'filename')
+  
+  # restore working directory
+  setwd(orgdir)
   
   return(percents)
 }
 
-makeGraphs <- function(df) {
-  # function that takes the df with all the data and makes a bunch of pretty graphs in a pdf format
-  
+makeGraphs <- function(photo_dir) {
+  # function that takes the directory with all the photo directories, runs the analysis and then makes the graphs
+  myresults <- list()
+  for(folder in list.dirs(recursive = F)) {
+    print(folder)
+    myresults <- append(myresults, loopFiles(folder))
+  }
 }
 
-ims <- list()
-percents <- matrix()
-for(folder in d) {
-  # print(list.files(folder))
-  
-  ims <- append(ims, )
-}
+#####################################################################################
 
-for(photo in list.files()) {
-  # ims <- append(ims, load.image(photo))
-  percents <- append(percents, getPercentLeaf(photo))
-}
+#testing area
