@@ -1,6 +1,6 @@
 # main
 library("imager")
-# setwd('~/media/Documents/UIUC/2016/ESE 389/Final Project/')
+# setwd('~/media/Documents/UIUC/2016/ESE 389/Final Project/photos/Braulio - Mar 20')
 
 getPercentLeaf <- function(file_path) {
   # get a kmeans df
@@ -31,4 +31,17 @@ loopFiles <- function(photos_path) {
 makeGraphs <- function(df) {
   # function that takes the df with all the data and makes a bunch of pretty graphs in a pdf format
   
+}
+
+ims <- list()
+percents <- matrix(ncol = 2)
+for(folder in d) {
+  # print(list.files(folder))
+  
+  ims <- append(ims, )
+}
+
+for(photo in list.files()) {
+  # ims <- append(ims, load.image(photo))
+  percents <- append(percents, getPercentLeaf(photo))
 }
