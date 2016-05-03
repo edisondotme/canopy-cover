@@ -1,5 +1,6 @@
 # main
 library("imager")
+# note, imagemagick needs to be installed too for some reason
 # setwd('~/media/Documents/UIUC/2016/ESE 389/Final Project/photos/Braulio - Mar 20')
 
 getPercentLeaf <- function(file_path) {
@@ -17,6 +18,10 @@ getPercentLeaf <- function(file_path) {
   
   num_pixels <- dim(image)[1] * dim(image)[2]
   percents <- km$size/num_pixels*100
+  
+  if(mean(image) > 0.5) {
+    # if there is more sky make\
+  }
   return(percents)
   
 }
@@ -24,8 +29,19 @@ getPercentLeaf <- function(file_path) {
 # next step is to setup the function to loop through files in folder and make data frames and graphs!!
 
 loopFiles <- function(photos_path) {
-  # loops through folders and files inside of photos_path and makes a big ol dataframe
-  directories <- list.dirs()
+  # loops through files inside of photos_path and makes a big ol matrix
+  setwd(photos_path)
+  percents <- c()
+  for(photo in list.files()) {
+    # ims <- append(ims, load.image(photo)) # uses too much ram
+    percents <- append(percents, getPercentLeaf(photo))
+  }
+  
+  # clean up the matrix
+  percents <- percents[!is.na(percents)]
+  percents <- matrix(percents, ncol = 2, byrow = TRUE)
+  
+  return(percents)
 }
 
 makeGraphs <- function(df) {
@@ -34,7 +50,7 @@ makeGraphs <- function(df) {
 }
 
 ims <- list()
-percents <- matrix(ncol = 2)
+percents <- matrix()
 for(folder in d) {
   # print(list.files(folder))
   
