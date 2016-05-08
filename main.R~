@@ -1,7 +1,7 @@
 # main
 library("imager")
-#library("foreach")
-#library("doMC")
+library("foreach")
+library("doMC")
 # registerDoMC(cores = 6) # something is wrong and parallel doesn't work. oh well
 # note, imagemagick needs to be installed too for some reason
 # setwd('~/media/Documents/UIUC/2016/ESE 389/Final Project/photos/Braulio - Mar 20')
@@ -34,7 +34,7 @@ getPercentLeaf <- function(file_path) {
 
 # next step is to setup the function to loop through files in folder and make data frames and graphs!!
 
-loopFiles <- function(photos_path, par = FALSE) {
+loopFiles <- function(photos_path, par = TRUE) {
   # loops through files inside of photos_path and makes a big ol matrix
   orgdir <- getwd()
   setwd(photos_path)
@@ -73,45 +73,32 @@ loopFiles <- function(photos_path, par = FALSE) {
   return(percents)
 }
 
-makeGraphs <- function(dfList) {
-  # function that takes list of dataframes generated using loopFiles(), runs the analysis and then makes the graphs
-  
-  avgs <- c()
-  # start pdf
-  pdf("outplots.pdf")
-  
-  # I should be using lapply here, but oh well
-  for(df in dfList) {
-    #print(deparse(substitute(df)))
-    avgs <- append(avgs, mean(df$leaf))
-    # for improvement: label in the title the forest
-    barplot(df$leaf, main = "Average leaf cover", xlab = "Image instance", ylab = "Percent leaf cover", col = "springgreen4")
+makeGraphs <- function(photo_dir) {
+  # function that takes the directory with all the photo directories, runs the analysis and then makes the graphs
+  myresults <- list()
+  for(folder in list.dirs(recursive = F)) {
+    print(folder)
+    #myresults <- append(myresults, loopFiles(folder))
   }
   
-  # for improvement: sort from low to high and label accordingly
-  barplot(avgs, col = 'springgreen4', main = 'Percent Canopy Cover in Costa Rica Forests', names.arg = c('Arenal', 'Braulio', 'Cahuita', 'Cloud Forest'), ylab = '"Average" percent leaf cover')
-  dev.off()
+  
 }
-
-
 
 #####################################################################################
-# testing area
-while(FALSE) {
-  
-  # main plot
-  barplot(avgs, col = 'springgreen4', main = 'Percent Canopy Cover in Costa Rica Forests', names.arg = c('Cahuita', 'Arenal', 'Braulio', 'Cloud Forest'), ylab = '"Average" percent leaf cover')
-  
-  # braulio plot
-  barplot(braulio$leaf, main = "Percent Leaf Cover in Braulio", xlab = 'Image instance', ylab = 'Percent leaf cover', col = 'darkolivegreen')
-  
-  # arenal plot
-  barplot(arenal$leaf, main = "Percent Leaf Cover in Arenal", xlab = 'Image instance', ylab = 'Percent leaf cover', col = 'darkolivegreen')
-  
-  # cahuita plot
-  barplot(cahuita$leaf, main = "Percent Leaf Cover in Cahuita", xlab = 'Image instance', ylab = 'Percent leaf cover', col = 'darkolivegreen')
-  
-  # cloud_forest plot
-  barplot(cloud_forest$leaf, main = "Percent Leaf Cover in Cloud Forest", xlab = 'Image instance', ylab = 'Percent leaf cover', col = 'darkolivegreen')
 
-}
+#testing area
+
+# main plot
+barplot(avgs, col = 'springgreen4', main = 'Percent Canopy Cover in Costa Rica Forests', names.arg = c('Cahuita', 'Arenal', 'Braulio', 'Cloud Forest'), ylab = '"Average" percent leaf cover')
+
+# braulio plot
+barplot(braulio$leaf, main = "Percent Leaf Cover in Braulio", xlab = 'Image instance', ylab = 'Percent leaf cover', col = 'darkolivegreen')
+
+# arenal plot
+barplot(arenal$leaf, main = "Percent Leaf Cover in Arenal", xlab = 'Image instance', ylab = 'Percent leaf cover', col = 'darkolivegreen')
+
+# cahuita plot
+barplot(cahuita$leaf, main = "Percent Leaf Cover in Cahuita", xlab = 'Image instance', ylab = 'Percent leaf cover', col = 'darkolivegreen')
+
+# cloud_forest plot
+barplot(cloud_forest$leaf, main = "Percent Leaf Cover in Cloud Forest", xlab = 'Image instance', ylab = 'Percent leaf cover', col = 'darkolivegreen')
