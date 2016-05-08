@@ -1,7 +1,7 @@
 # main
 library("imager")
-library("foreach")
-library("doMC")
+#library("foreach")
+#library("doMC")
 # registerDoMC(cores = 6) # something is wrong and parallel doesn't work. oh well
 # note, imagemagick needs to be installed too for some reason
 # setwd('~/media/Documents/UIUC/2016/ESE 389/Final Project/photos/Braulio - Mar 20')
