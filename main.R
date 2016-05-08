@@ -1,15 +1,25 @@
-# main
+# main.R
+
+# ESE 389
+# Canopy Cover Assessment in Costa 
+# Rica Forests Using Leaf Gap Fraction 
+# Analysis and Hemispherical 
+# Photograph
+
+# Load image processing library
 library("imager")
+
+# load parallization libraries
 #library("foreach")
 #library("doMC")
 # registerDoMC(cores = 6) # something is wrong and parallel doesn't work. oh well
-# note, imagemagick needs to be installed too for some reason
-# setwd('~/media/Documents/UIUC/2016/ESE 389/Final Project/photos/Braulio - Mar 20')
+
+# note, imagemagick needs to be installed too for some reason - this could be a problem for ROGER
 
 getPercentLeaf <- function(file_path) {
   # get a kmeans df
   # input image file path
-  # output percent leaf cover first sky, second leaves I think
+  # output percent leaf cover first sky, second leaves
   
   image <- load.image(file_path)
   image <- grayscale(image)
@@ -19,11 +29,13 @@ getPercentLeaf <- function(file_path) {
   km <- kmeans(as.vector(image), centers = 2)
   # note km$size returns a two vector - first is sky, second is leaves
   
+  # get percent leaf/sky
   num_pixels <- dim(image)[1] * dim(image)[2]
   percents <- km$size/num_pixels*100
   
   if(mean(image) > 0.5) {
-    # higher than .5 means the image is mostly sky
+    # sometimes percents is returned in the wrong order, this if statement fixes that
+    # higher than .5 means the image is estimated to be mostly sky
     # make sure to sort decreasing if this is the case
     percents <- sort(percents, decreasing = TRUE)
   } else {
@@ -32,10 +44,9 @@ getPercentLeaf <- function(file_path) {
   return(percents)
 }
 
-# next step is to setup the function to loop through files in folder and make data frames and graphs!!
-
 loopFiles <- function(photos_path, par = FALSE) {
-  # loops through files inside of photos_path and makes a big ol matrix
+  # loops through files inside of photos_path and makes a df
+  # par determines whether or not to run in parallel or not
   orgdir <- getwd()
   setwd(photos_path)
   percents <- c()
@@ -54,7 +65,7 @@ loopFiles <- function(photos_path, par = FALSE) {
     }
   }
   
-  # to test parallel processing time, use system.time(loopFiles(...), par = T or F)
+  # Note: to test parallel processing time, use system.time(loopFiles(...), par = T or F)
   
   # clean up the matrix
   percents <- percents[!is.na(percents)]
