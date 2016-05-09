@@ -11,4 +11,4 @@ The above image is the result of running the R built in kmeans clustering algori
 
 From the above plot, I found that Cahuita had the lowest canopy cover of all, but all the forests were pretty much the same in general. The canopy cover in Costa Rica is very high and very consistent among different geographic regions.
 
-
+[Presentation Link](https://goo.gl/KvtCwG)
