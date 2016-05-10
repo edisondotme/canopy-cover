@@ -91,7 +91,8 @@ makeGraphs <- function(dfList) {
   avgs <- c()
   # start pdf
   orgdir <- getwd()
-  setwd(dirname(parent.frame(3)$ofile))
+  #setwd(dirname(parent.frame(3)$ofile))
+  setwd("~/canopy-cover/") # remove if not on roger
   pdf("outplots.pdf")
   
   # I should be using lapply here, but oh well
