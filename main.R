@@ -60,6 +60,7 @@ loopFiles <- function(photos_path, par = FALSE) {
   } else {
     print('not doing in parallel!!')
     for(photo in list.files()) {
+      print(photo)
       # ims <- append(ims, load.image(photo)) # uses too much ram
       percents <- append(percents, c(as.numeric(getPercentLeaf(photo)), photo))
     }
@@ -108,17 +109,20 @@ execute <- function(test = F) {
   if(test){
     print("Script works.")
   } else {
+    script.dir <- dirname(sys.frame(1)$ofile)
+    setwd(script.dir)
+    
     out = list()
-    for(i in 1:length(list.dirs(recursive = FALSE))){
-      
-      dirs <- list.dirs(recursive = F)
+    for(i in 1:length(list.dirs(path ="./photos/", recursive = FALSE))){
+      dirs <- list.dirs(path = "./photos/", recursive = F)
+      # print(dirs)
       out[[i]] <- loopFiles(dirs[i])
     }
     return(out)
   }
 }
 
-execute()
+makeGraphs(execute())
 
 
 #####################################################################################
