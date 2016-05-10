@@ -104,6 +104,20 @@ makeGraphs <- function(dfList) {
   dev.off()
 }
 
+execute <- function(test = T) {
+  if(test){
+    print("Script works.")
+  } else {
+    out = list()
+    for(i in 1:length(list.dirs(recursive = FALSE))){
+      
+      dirs <- list.dirs(recursive = F)
+      out[[i]] <- loopFiles(dirs[i])
+    }
+    return(out)
+  }
+}
+
 
 
 #####################################################################################
