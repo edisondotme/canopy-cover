@@ -90,6 +90,8 @@ makeGraphs <- function(dfList) {
   
   avgs <- c()
   # start pdf
+  orgdir <- getwd()
+  setwd(dirname(parent.frame(3)$ofile))
   pdf("outplots.pdf")
   
   # I should be using lapply here, but oh well
@@ -103,14 +105,20 @@ makeGraphs <- function(dfList) {
   # for improvement: sort from low to high and label accordingly
   barplot(avgs, col = 'springgreen4', main = 'Percent Canopy Cover in Costa Rica Forests', names.arg = c('Arenal', 'Braulio', 'Cahuita', 'Cloud Forest'), ylab = '"Average" percent leaf cover')
   dev.off()
+  
+  # restore working directory
+  setwd(orgdir)
 }
 
 execute <- function(test = F) {
   if(test){
     print("Script works.")
   } else {
-    script.dir <- dirname(sys.frame(1)$ofile)
-    setwd(script.dir)
+    #script.dir <- dirname(sys.frame(1)$ofile)
+    #setwd(script.dir)
+    
+    # hard code directory - this will only allow it to run on roger
+    setwd("~/canopy-cover/")
     
     out = list()
     for(i in 1:length(list.dirs(path ="./photos/", recursive = FALSE))){
