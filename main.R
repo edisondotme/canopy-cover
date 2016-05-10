@@ -104,7 +104,7 @@ makeGraphs <- function(dfList) {
   dev.off()
 }
 
-execute <- function(test = T) {
+execute <- function(test = F) {
   if(test){
     print("Script works.")
   } else {
